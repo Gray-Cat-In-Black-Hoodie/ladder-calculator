@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Total Battle ⚔️ Калькулятор</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --accent-color: #2563eb;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      margin: 0;
+    }
+
+    .calculator-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    /* Controls Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .control-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f8fafc;
+      padding: 10px 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .control-input {
+      width: 80%;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px;
+      background: #fff;
+      color: var(--text-main);
+    }
+
+    .control-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    .read-only-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 5px 0;
+      color: #059669;
+    }
+
+    /* Reset Button */
+    .reset-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .reset-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .reset-btn:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    /* Section Label */
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    /* Guard Tiers Horizontal Strip */
+    .tiers-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      background: #f8fafc;
+      padding: 8px 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    .tier-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tier-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .tier-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent-color);
+    }
+
+    /* Output Ladder Table */
+    .ladder-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .ladder-row {
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .ladder-row:last-child {
+      border-bottom: none;
+    }
+
+    .unit-type-cell {
+      width: 55%;
+      text-align: right;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .unit-count-cell {
+      width: 45%;
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    /* Footer Image & Branding Section */
+    .footer-branding {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+    }
+
+    .footer-caption {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-card">
+    
+    <div class="header-title">Total Battle ⚔️ Калькулятор</div>
+
+    <!-- Controls Row -->
+    <div class="controls-grid">
+      <div class="control-item">
+        <span class="control-label">Лидерство</span>
+        <input type="number" id="leadershipInput" class="control-input" value="1800" min="0" step="10">
+      </div>
+      <div class="control-item">
+        <span class="control-label">Остаток</span>
+        <span id="remainderVal" class="read-only-val">0</span>
+      </div>
+      <div class="control-item">
+        <span class="control-label">Округлить</span>
+        <select id="roundSelect" class="control-input">
+          <option value="none">Нет</option>
+          <option value="10">10</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Reset Button -->
+    <div class="reset-container">
+      <button id="resetBtn" class="reset-btn">🔄 Сбросить</button>
+    </div>
+
+    <!-- Guard Checkboxes -->
+    <div class="section-label">Выберите гвардию:</div>
+    <div class="tiers-container">
+      <div class="tier-col"><span class="tier-header">1</span><input type="checkbox" class="tier-checkbox" data-tier="1" checked></div>
+      <div class="tier-col"><span class="tier-header">2</span><input type="checkbox" class="tier-checkbox" data-tier="2" checked></div>
+      <div class="tier-col"><span class="tier-header">3</span><input type="checkbox" class="tier-checkbox" data-tier="3"></div>
+      <div class="tier-col"><span class="tier-header">4</span><input type="checkbox" class="tier-checkbox" data-tier="4"></div>
+      <div class="tier-col"><span class="tier-header">5</span><input type="checkbox" class="tier-checkbox" data-tier="5"></div>
+      <div class="tier-col"><span class="tier-header">6</span><input type="checkbox" class="tier-checkbox" data-tier="6"></div>
+      <div class="tier-col"><span class="tier-header">7</span><input type="checkbox" class="tier-checkbox" data-tier="7"></div>
+    </div>
+
+    <!-- Ladder Result -->
+    <div class="section-label">Итоговая лесенка:</div>
+    <table class="ladder-table">
+      <tbody id="ladderBody">
+        <!-- Dynamic Rows -->
+      </tbody>
+    </table>
+
+    <!-- Footer Branding -->
+    <div class="footer-branding">
+
+      <img src="cat.jpg" alt="Gray Cat" class="footer-img" id="footerImg">
+      <span class="footer-caption">Gray Cat In Black Hoodie</span>
+    </div>
+
+  </div>
+
+  <script>
+    const digitEmojis = { 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣', 6: '6️⃣', 7: '7️⃣' };
+    const unitConfigs = [
+      { name: 'Всадник 🐴', mult: 1, cost: 2 },
+      { name: 'Лучник 🏹', mult: 2, cost: 1 },
+      { name: 'Копейщик 🗡️', mult: 2, cost: 1 }
+    ];
+
+    const leadershipInput = document.getElementById('leadershipInput');
+    const remainderVal = document.getElementById('remainderVal');
+    const roundSelect = document.getElementById('roundSelect');
+    const checkboxes = document.querySelectorAll('.tier-checkbox');
+    const ladderBody = document.getElementById('ladderBody');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function calculate() {
+      const L = parseFloat(leadershipInput.value) || 0;
+      const roundMode = roundSelect.value;
+
+      const activeTiers = [];
+      checkboxes.forEach(cb => {
+        if (cb.checked) activeTiers.push(parseInt(cb.dataset.tier));
+      });
+
+      if (activeTiers.length === 0 || L === 0) {
+        remainderVal.textContent = L;
+        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:#94a3b8;">Укажите лидерство и выберите гвардию</td></tr>';
+        return;
+      }
+
+      const K1 = Math.max(...activeTiers);
+
+      let K2 = 0;
+      activeTiers.forEach(t => {
+        K2 += 6 * Math.pow(2, K1 - t);
+      });
+
+      let K3 = 0;
+      if (K2 > 0) {
+        const rawX = L / K2;
+        if (roundMode === '10') {
+          K3 = Math.floor(rawX / 10) * 10;
+        } else if (roundMode === '100') {
+          K3 = Math.floor(rawX / 100) * 100;
+        } else {
+          K3 = Math.floor(rawX);
+        }
+      }
+
+      let totalUsedLeadership = 0;
+      let htmlRows = '';
+
+      for (let t = 7; t >= 1; t--) {
+        if (activeTiers.includes(t)) {
+          unitConfigs.forEach(unit => {
+            const count = K3 * unit.mult * Math.pow(2, K1 - t);
+            const leadCost = count * unit.cost;
+            totalUsedLeadership += leadCost;
+
+            htmlRows += `
+              <tr class="ladder-row">
+                <td class="unit-type-cell">${unit.name}${digitEmojis[t]}</td>
+                <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
+              </tr>
+            `;
+          });
+        }
+      }
+
+      const remainder = L - totalUsedLeadership;
+      remainderVal.textContent = remainder.toLocaleString('ru-RU');
+      ladderBody.innerHTML = htmlRows;
+    }
+
+    // Reset Functionality
+    resetBtn.addEventListener('click', () => {
+      leadershipInput.value = 0;
+      roundSelect.value = 'none';
+      checkboxes.forEach(cb => cb.checked = false);
+      calculate();
+    });
+
+    leadershipInput.addEventListener('input', calculate);
+    roundSelect.addEventListener('change', calculate);
+    checkboxes.forEach(cb => cb.addEventListener('change', calculate));
+
+    // Initial Run with defaults
+    calculate();
+  </script>
+</body>
+</html>
