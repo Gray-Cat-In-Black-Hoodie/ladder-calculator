@@ -12,6 +12,21 @@
       --border-color: #e2e8f0;
       --text-main: #1e293b;
       --text-muted: #64748b;
+      --input-bg: #ffffff;
+      --panel-bg: #f8fafc;
+      --count-color: #2563eb;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #3b82f6;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #0f172a;
+      --panel-bg: #0f172a;
+      --count-color: #60a5fa;
     }
 
     body {
@@ -22,6 +37,7 @@
       justify-content: center;
       padding: 20px 10px;
       margin: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .calculator-card {
@@ -30,16 +46,38 @@
       max-width: 420px;
       padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+      transition: background-color 0.3s;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
     .header-title {
-      text-align: center;
       font-size: 1.25rem;
       font-weight: 700;
-      margin-bottom: 16px;
       color: var(--text-main);
       white-space: nowrap;
+    }
+
+    .theme-toggle-btn {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--accent-color);
     }
 
     /* Controls Grid */
@@ -54,7 +92,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #f8fafc;
+      background: var(--panel-bg);
       padding: 10px 6px;
       border-radius: 10px;
       border: 1px solid var(--border-color);
@@ -73,10 +111,10 @@
       text-align: center;
       font-size: 0.95rem;
       font-weight: 700;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       padding: 4px;
-      background: #fff;
+      background: var(--input-bg);
       color: var(--text-main);
     }
 
@@ -89,7 +127,7 @@
       font-size: 0.95rem;
       font-weight: 700;
       padding: 5px 0;
-      color: #059669;
+      color: #10b981;
     }
 
     /* Reset Button */
@@ -116,56 +154,55 @@
       color: #dc2626;
     }
 
-    /* Tiers Dual Section (Guard & Specs) */
-    .tiers-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* Stacked Tiers Section (Guard & Specs One Under Another) */
+    .tiers-stacked-wrapper {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
       margin-bottom: 20px;
     }
 
-    .tier-group {
-      background: #f8fafc;
-      padding: 10px 6px;
+    .tier-group-row {
+      background: var(--panel-bg);
+      padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid var(--border-color);
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: space-between;
     }
 
     .tier-group-title {
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      width: 30%;
     }
 
-    .tiers-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      width: 100%;
-    }
-
-    .tier-col {
+    .tiers-strip-horizontal {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 70%;
+    }
+
+    .tier-item-inline {
+      display: flex;
       align-items: center;
       gap: 4px;
     }
 
-    .tier-header {
-      font-size: 0.8rem;
+    .tier-num-label {
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--text-main);
     }
 
     .tier-checkbox {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       cursor: pointer;
       accent-color: var(--accent-color);
     }
@@ -179,7 +216,7 @@
       text-align: center;
     }
 
-    /* Output Ladder Table */
+    /* Output Ladder Table (Larger Font) */
     .ladder-table {
       width: 100%;
       border-collapse: collapse;
@@ -195,21 +232,21 @@
     }
 
     .unit-type-cell {
-      width: 55%;
+      width: 50%;
       text-align: right;
-      padding: 7px 10px;
-      font-size: 0.88rem;
+      padding: 8px 10px;
+      font-size: 0.98rem;
       font-weight: 600;
       color: var(--text-main);
     }
 
     .unit-count-cell {
-      width: 45%;
+      width: 50%;
       text-align: left;
-      padding: 7px 10px;
-      font-size: 0.95rem;
+      padding: 8px 10px;
+      font-size: 1.1rem;
       font-weight: 700;
-      color: var(--accent-color);
+      color: var(--count-color);
     }
 
     /* Footer Branding */
@@ -226,7 +263,7 @@
       height: 85px;
       object-fit: cover;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
       margin-bottom: 6px;
     }
 
@@ -239,9 +276,10 @@
 
     .footer-version {
       font-size: 0.7rem;
-      color: #94a3b8;
+      color: var(--text-muted);
       font-weight: 500;
       margin-top: 2px;
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -249,7 +287,10 @@
 
   <div class="calculator-card">
     
-    <div class="header-title">Total Battle ⚔️ Калькулятор</div>
+    <div class="header-container">
+      <div class="header-title">Total Battle ⚔️ Калькулятор</div>
+      <button id="themeToggleBtn" class="theme-toggle-btn" title="Переключить тему">☀️</button>
+    </div>
 
     <!-- Controls Row -->
     <div class="controls-grid">
@@ -276,28 +317,30 @@
       <button id="resetBtn" class="reset-btn">🔄 Сбросить</button>
     </div>
 
-    <!-- Dual Tiers Container (Guard & Specs) -->
-    <div class="tiers-wrapper">
+    <!-- Stacked Tiers (Guard & Specs) -->
+    <div class="tiers-stacked-wrapper">
       
       <!-- Guard Section -->
-      <div class="tier-group">
+      <div class="tier-group-row">
         <div class="tier-group-title">Гвардия</div>
-        <div class="tiers-strip">
-          <div class="tier-col"><span class="tier-header">1</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="1" checked></div>
-          <div class="tier-col"><span class="tier-header">2</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="2" checked></div>
-          <div class="tier-col"><span class="tier-header">3</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="3"></div>
-          <div class="tier-col"><span class="tier-header">4</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="4"></div>
+        <div class="tiers-strip-horizontal">
+          <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="1" checked></div>
+          <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="2" checked></div>
+          <div class="tier-item-inline"><span class="tier-num-label">3</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="3"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">4</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="4"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">5</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="5"></div>
         </div>
       </div>
 
       <!-- Specialists Section -->
-      <div class="tier-group">
+      <div class="tier-group-row">
         <div class="tier-group-title">Специалисты</div>
-        <div class="tiers-strip">
-          <div class="tier-col"><span class="tier-header">1</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="1"></div>
-          <div class="tier-col"><span class="tier-header">2</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="2"></div>
-          <div class="tier-col"><span class="tier-header">3</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="3"></div>
-          <div class="tier-col"><span class="tier-header">4</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="4"></div>
+        <div class="tiers-strip-horizontal">
+          <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="1"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="2"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">3</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="3"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">4</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="4"></div>
+          <div class="tier-item-inline"><span class="tier-num-label">5</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="5"></div>
         </div>
       </div>
 
@@ -315,13 +358,13 @@
     <div class="footer-branding">
       <img src="cat.jpg" alt="Gray Cat" class="footer-img" id="footerImg">
       <span class="footer-caption">Gray Cat In Black Hoodie</span>
-      <span class="footer-version">simple ladder calculator v.2</span>
+      <span class="footer-version">simple ladder calculator v.3</span>
     </div>
 
   </div>
 
   <script>
-    const digitEmojis = { 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣' };
+    const digitEmojis = { 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣' };
     
     const guardUnits = [
       { name: 'Всадник 🐴', mult: 1, cost: 2 },
@@ -341,6 +384,27 @@
     const allCheckboxes = document.querySelectorAll('.tier-checkbox');
     const ladderBody = document.getElementById('ladderBody');
     const resetBtn = document.getElementById('resetBtn');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+
+    // Theme Logic
+    const savedTheme = localStorage.getItem('tb_calc_theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeToggleBtn.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggleBtn.textContent = '☀️';
+        localStorage.setItem('tb_calc_theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeToggleBtn.textContent = '🌙';
+        localStorage.setItem('tb_calc_theme', 'dark');
+      }
+    });
 
     function calculate() {
       const L = parseFloat(leadershipInput.value) || 0;
@@ -360,7 +424,7 @@
 
       if (!hasActive || L === 0) {
         remainderVal.textContent = L;
-        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:#94a3b8; font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или специалистов</td></tr>';
+        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или специалистов</td></tr>';
         return;
       }
 
@@ -393,8 +457,8 @@
       let totalUsedLeadership = 0;
       let htmlRows = '';
 
-      // Output Ladder by Tier (T4 down to T1)
-      for (let t = 4; t >= 1; t--) {
+      // Output Ladder by Tier (T5 down to T1)
+      for (let t = 5; t >= 1; t--) {
         // Guard units for Tier T
         if (activeGuardTiers.includes(t)) {
           guardUnits.forEach(unit => {
