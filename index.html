@@ -9,12 +9,18 @@
       --bg-color: #f4f6f8;
       --card-bg: #ffffff;
       --accent-color: #2563eb;
-      --border-color: #e2e8f0;
+      --border-color: #cbd5e1;
       --text-main: #1e293b;
       --text-muted: #64748b;
       --input-bg: #ffffff;
       --panel-bg: #f8fafc;
       --count-color: #2563eb;
+
+      /* Soft Subtle Zebra Colors (Light Mode) */
+      --tier-even-bg: #f1f5f9;
+      --tier-odd-bg: transparent;
+      --row-border-color: #e2e8f0;
+      --tier-separator-color: #cbd5e1;
     }
 
     [data-theme="dark"] {
@@ -27,6 +33,12 @@
       --input-bg: #0f172a;
       --panel-bg: #0f172a;
       --count-color: #60a5fa;
+
+      /* Soft Subtle Zebra Colors (Dark Mode) */
+      --tier-even-bg: rgba(255, 255, 255, 0.035);
+      --tier-odd-bg: transparent;
+      --row-border-color: #334155;
+      --tier-separator-color: #475569;
     }
 
     body {
@@ -154,7 +166,7 @@
       color: #dc2626;
     }
 
-    /* Stacked Tiers Section (Guard & Swordsmen One Under Another) */
+    /* Stacked Tiers Section */
     .tiers-stacked-wrapper {
       display: flex;
       flex-direction: column;
@@ -223,18 +235,32 @@
       margin-bottom: 20px;
     }
 
-    .ladder-row {
-      border-bottom: 1px dashed var(--border-color);
+    .ladder-row td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--row-border-color);
     }
 
-    .ladder-row:last-child {
-      border-bottom: none;
+    /* Stronger Separator Line Between Tiers */
+    .tier-start-row td {
+      border-top: 2px solid var(--tier-separator-color);
+    }
+
+    .ladder-table tbody tr:first-child td {
+      border-top: none;
+    }
+
+    /* Subtle Zebra Tint */
+    .row-tier-even {
+      background-color: var(--tier-even-bg);
+    }
+
+    .row-tier-odd {
+      background-color: var(--tier-odd-bg);
     }
 
     .unit-type-cell {
       width: 50%;
       text-align: right;
-      padding: 8px 10px;
       font-size: 0.98rem;
       font-weight: 600;
       color: var(--text-main);
@@ -243,7 +269,6 @@
     .unit-count-cell {
       width: 50%;
       text-align: left;
-      padding: 8px 10px;
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--count-color);
@@ -358,7 +383,7 @@
     <div class="footer-branding">
       <img src="cat.jpg" alt="Gray Cat" class="footer-img" id="footerImg">
       <span class="footer-caption">Gray Cat In Black Hoodie</span>
-      <span class="footer-version">simple ladder calculator v.3</span>
+      <span class="footer-version">simple ladder calculator v.3.4</span>
     </div>
 
   </div>
@@ -459,15 +484,25 @@
 
       // Output Ladder by Tier (T5 down to T1)
       for (let t = 5; t >= 1; t--) {
+        const hasGuard = activeGuardTiers.includes(t);
+        const hasSpec = activeSpecTiers.includes(t);
+
+        if (!hasGuard && !hasSpec) continue;
+
+        const tierClass = (t % 2 === 0) ? 'row-tier-even' : 'row-tier-odd';
+
         // Guard units for Tier T
-        if (activeGuardTiers.includes(t)) {
-          guardUnits.forEach(unit => {
+        if (hasGuard) {
+          guardUnits.forEach((unit, idx) => {
             const count = K3 * unit.mult * Math.pow(2, K1 - t);
             const leadCost = count * unit.cost;
             totalUsedLeadership += leadCost;
 
+            const isFirstRowOfTier = (idx === 0);
+            const borderClass = isFirstRowOfTier ? 'tier-start-row' : '';
+
             htmlRows += `
-              <tr class="ladder-row">
+              <tr class="ladder-row ${tierClass} ${borderClass}">
                 <td class="unit-type-cell">${unit.name}${digitEmojis[t]}</td>
                 <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
               </tr>
@@ -476,14 +511,17 @@
         }
 
         // Specialist Swordsman for the same Tier T right after Guard
-        if (activeSpecTiers.includes(t)) {
-          specUnits.forEach(unit => {
+        if (hasSpec) {
+          specUnits.forEach((unit, idx) => {
             const count = K3 * unit.mult * Math.pow(2, K1 - t);
             const leadCost = count * unit.cost;
             totalUsedLeadership += leadCost;
 
+            const isFirstRowOfTier = (!hasGuard && idx === 0);
+            const borderClass = isFirstRowOfTier ? 'tier-start-row' : '';
+
             htmlRows += `
-              <tr class="ladder-row">
+              <tr class="ladder-row ${tierClass} ${borderClass}">
                 <td class="unit-type-cell">${unit.name}${digitEmojis[t]}</td>
                 <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
               </tr>
