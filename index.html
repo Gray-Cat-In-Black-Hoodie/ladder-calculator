@@ -154,7 +154,7 @@
       color: #dc2626;
     }
 
-    /* Stacked Tiers Section (Guard & Specs One Under Another) */
+    /* Stacked Tiers Section (Guard & Swordsmen One Under Another) */
     .tiers-stacked-wrapper {
       display: flex;
       flex-direction: column;
@@ -216,7 +216,7 @@
       text-align: center;
     }
 
-    /* Output Ladder Table (Larger Font) */
+    /* Output Ladder Table */
     .ladder-table {
       width: 100%;
       border-collapse: collapse;
@@ -317,7 +317,7 @@
       <button id="resetBtn" class="reset-btn">🔄 Сбросить</button>
     </div>
 
-    <!-- Stacked Tiers (Guard & Specs) -->
+    <!-- Stacked Tiers (Guard & Swordsmen) -->
     <div class="tiers-stacked-wrapper">
       
       <!-- Guard Section -->
@@ -332,9 +332,9 @@
         </div>
       </div>
 
-      <!-- Specialists Section -->
+      <!-- Swordsmen Section -->
       <div class="tier-group-row">
-        <div class="tier-group-title">Специалисты</div>
+        <div class="tier-group-title">Мечники</div>
         <div class="tiers-strip-horizontal">
           <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="1"></div>
           <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="2"></div>
@@ -424,7 +424,7 @@
 
       if (!hasActive || L === 0) {
         remainderVal.textContent = L;
-        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или специалистов</td></tr>';
+        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или мечников</td></tr>';
         return;
       }
 
