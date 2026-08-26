@@ -21,6 +21,7 @@
       --tier-odd-bg: transparent;
       --row-border-color: #e2e8f0;
       --tier-separator-color: #cbd5e1;
+      --big-num-color: rgba(30, 41, 59, 0.15);
     }
 
     [data-theme="dark"] {
@@ -39,6 +40,7 @@
       --tier-odd-bg: transparent;
       --row-border-color: #334155;
       --tier-separator-color: #475569;
+      --big-num-color: rgba(248, 250, 252, 0.12);
     }
 
     body {
@@ -240,7 +242,24 @@
       border-bottom: 1px solid var(--row-border-color);
     }
 
-    /* Stronger Separator Line Between Tiers */
+    /* Big Background Tier Number Cell */
+    .tier-number-cell {
+      width: 45px;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: 900;
+      color: var(--big-num-color);
+      user-select: none;
+      padding: 0 4px !important;
+      line-height: 0.9;
+    }
+
+    /* Dynamic font sizes based on row count */
+    .tier-size-1 { font-size: 1.8rem; }
+    .tier-size-3 { font-size: 3.8rem; }
+    .tier-size-4 { font-size: 4.8rem; }
+
+    /* Separator Line Between Tiers */
     .tier-start-row td {
       border-top: 2px solid var(--tier-separator-color);
     }
@@ -259,15 +278,15 @@
     }
 
     .unit-type-cell {
-      width: 50%;
       text-align: right;
       font-size: 0.98rem;
       font-weight: 600;
       color: var(--text-main);
+      padding-right: 12px !important;
     }
 
     .unit-count-cell {
-      width: 50%;
+      width: 45%;
       text-align: left;
       font-size: 1.1rem;
       font-weight: 700;
@@ -383,14 +402,12 @@
     <div class="footer-branding">
       <img src="cat.jpg" alt="Gray Cat" class="footer-img" id="footerImg">
       <span class="footer-caption">Gray Cat In Black Hoodie</span>
-      <span class="footer-version">simple ladder calculator v.3.4</span>
+      <span class="footer-version">simple ladder calculator v.3.6</span>
     </div>
 
   </div>
 
   <script>
-    const digitEmojis = { 1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣' };
-    
     const guardUnits = [
       { name: 'Всадник 🐴', mult: 1, cost: 2 },
       { name: 'Лучник 🏹', mult: 2, cost: 1 },
@@ -449,7 +466,7 @@
 
       if (!hasActive || L === 0) {
         remainderVal.textContent = L;
-        ladderBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или мечников</td></tr>';
+        ladderBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или мечников</td></tr>';
         return;
       }
 
@@ -490,44 +507,36 @@
         if (!hasGuard && !hasSpec) continue;
 
         const tierClass = (t % 2 === 0) ? 'row-tier-even' : 'row-tier-odd';
+        
+        // Total rows in this tier for rowspan calculation
+        const tierUnits = [];
+        if (hasGuard) tierUnits.push(...guardUnits);
+        if (hasSpec) tierUnits.push(...specUnits);
 
-        // Guard units for Tier T
-        if (hasGuard) {
-          guardUnits.forEach((unit, idx) => {
-            const count = K3 * unit.mult * Math.pow(2, K1 - t);
-            const leadCost = count * unit.cost;
-            totalUsedLeadership += leadCost;
+        const totalRowsInTier = tierUnits.length;
+        const sizeClass = `tier-size-${totalRowsInTier}`;
 
-            const isFirstRowOfTier = (idx === 0);
-            const borderClass = isFirstRowOfTier ? 'tier-start-row' : '';
+        tierUnits.forEach((unit, idx) => {
+          const count = K3 * unit.mult * Math.pow(2, K1 - t);
+          const leadCost = count * unit.cost;
+          totalUsedLeadership += leadCost;
 
-            htmlRows += `
-              <tr class="ladder-row ${tierClass} ${borderClass}">
-                <td class="unit-type-cell">${unit.name}${digitEmojis[t]}</td>
-                <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
-              </tr>
-            `;
-          });
-        }
+          const isFirstRowOfTier = (idx === 0);
+          const borderClass = isFirstRowOfTier ? 'tier-start-row' : '';
 
-        // Specialist Swordsman for the same Tier T right after Guard
-        if (hasSpec) {
-          specUnits.forEach((unit, idx) => {
-            const count = K3 * unit.mult * Math.pow(2, K1 - t);
-            const leadCost = count * unit.cost;
-            totalUsedLeadership += leadCost;
+          htmlRows += `<tr class="ladder-row ${tierClass} ${borderClass}">`;
 
-            const isFirstRowOfTier = (!hasGuard && idx === 0);
-            const borderClass = isFirstRowOfTier ? 'tier-start-row' : '';
+          // Dynamic background number fitting the block height perfectly
+          if (isFirstRowOfTier) {
+            htmlRows += `<td class="tier-number-cell ${sizeClass}" rowspan="${totalRowsInTier}">${t}</td>`;
+          }
 
-            htmlRows += `
-              <tr class="ladder-row ${tierClass} ${borderClass}">
-                <td class="unit-type-cell">${unit.name}${digitEmojis[t]}</td>
-                <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
-              </tr>
-            `;
-          });
-        }
+          htmlRows += `
+              <td class="unit-type-cell">${unit.name}</td>
+              <td class="unit-count-cell">${count.toLocaleString('ru-RU')}</td>
+            </tr>
+          `;
+        });
       }
 
       const remainder = L - totalUsedLeadership;
