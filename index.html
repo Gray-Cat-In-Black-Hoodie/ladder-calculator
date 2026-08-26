@@ -16,7 +16,7 @@
       --panel-bg: #f8fafc;
       --count-color: #2563eb;
 
-      /* Soft Subtle Zebra Colors (Light Mode) */
+      /* Zebra Colors (Light Mode) */
       --tier-even-bg: #f1f5f9;
       --tier-odd-bg: transparent;
       --row-border-color: #e2e8f0;
@@ -35,7 +35,7 @@
       --panel-bg: #0f172a;
       --count-color: #60a5fa;
 
-      /* Soft Subtle Zebra Colors (Dark Mode) */
+      /* Zebra Colors (Dark Mode) */
       --tier-even-bg: rgba(255, 255, 255, 0.035);
       --tier-odd-bg: transparent;
       --row-border-color: #334155;
@@ -65,23 +65,56 @@
       transition: background-color 0.3s;
     }
 
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .header-title {
+    /* Top Header Title */
+    .header-title-main {
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-main);
-      white-space: nowrap;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    /* Mode & Theme Selector Bar */
+    .top-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: var(--panel-bg);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .mode-switch-group {
+      display: flex;
+      flex: 1;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active {
+      background: var(--card-bg);
+      color: var(--accent-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .theme-toggle-btn {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
+      background: none;
+      border: none;
       color: var(--text-main);
       font-size: 1.1rem;
       padding: 4px 8px;
@@ -91,7 +124,7 @@
     }
 
     .theme-toggle-btn:hover {
-      border-color: var(--accent-color);
+      background: var(--card-bg);
     }
 
     /* Controls Grid */
@@ -110,6 +143,7 @@
       padding: 10px 6px;
       border-radius: 10px;
       border: 1px solid var(--border-color);
+      transition: opacity 0.2s;
     }
 
     .control-label {
@@ -135,6 +169,12 @@
     .control-input:focus {
       outline: none;
       border-color: var(--accent-color);
+    }
+
+    .control-input:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: var(--panel-bg);
     }
 
     .read-only-val {
@@ -168,38 +208,32 @@
       color: #dc2626;
     }
 
-    /* Stacked Tiers Section */
-    .tiers-stacked-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    /* Guard Tiers Section */
     .tier-group-row {
       background: var(--panel-bg);
-      padding: 10px 12px;
+      padding: 12px;
       border-radius: 12px;
       border: 1px solid var(--border-color);
+      margin-bottom: 20px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      gap: 8px;
     }
 
     .tier-group-title {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--text-main);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      width: 30%;
     }
 
     .tiers-strip-horizontal {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
-      width: 70%;
+      width: 100%;
     }
 
     .tier-item-inline {
@@ -209,14 +243,14 @@
     }
 
     .tier-num-label {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--text-main);
     }
 
     .tier-checkbox {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       cursor: pointer;
       accent-color: var(--accent-color);
     }
@@ -247,17 +281,13 @@
       width: 45px;
       text-align: center;
       vertical-align: middle;
+      font-size: 3.8rem;
       font-weight: 900;
       color: var(--big-num-color);
       user-select: none;
       padding: 0 4px !important;
       line-height: 0.9;
     }
-
-    /* Dynamic font sizes based on row count */
-    .tier-size-1 { font-size: 1.8rem; }
-    .tier-size-3 { font-size: 3.8rem; }
-    .tier-size-4 { font-size: 4.8rem; }
 
     /* Separator Line Between Tiers */
     .tier-start-row td {
@@ -268,7 +298,7 @@
       border-top: none;
     }
 
-    /* Subtle Zebra Tint */
+    /* Zebra Tint */
     .row-tier-even {
       background-color: var(--tier-even-bg);
     }
@@ -331,8 +361,15 @@
 
   <div class="calculator-card">
     
-    <div class="header-container">
-      <div class="header-title">Total Battle ⚔️ Калькулятор</div>
+    <!-- Top Header Title -->
+    <div class="header-title-main">Total Battle ⚔️ Калькулятор</div>
+
+    <!-- Mode & Theme Switcher Bar -->
+    <div class="top-toolbar">
+      <div class="mode-switch-group">
+        <button id="btnSimple" class="mode-btn active">Простой</button>
+        <button id="btnAdvanced" class="mode-btn">Эффективный</button>
+      </div>
       <button id="themeToggleBtn" class="theme-toggle-btn" title="Переключить тему">☀️</button>
     </div>
 
@@ -361,33 +398,16 @@
       <button id="resetBtn" class="reset-btn">🔄 Сбросить</button>
     </div>
 
-    <!-- Stacked Tiers (Guard & Swordsmen) -->
-    <div class="tiers-stacked-wrapper">
-      
-      <!-- Guard Section -->
-      <div class="tier-group-row">
-        <div class="tier-group-title">Гвардия</div>
-        <div class="tiers-strip-horizontal">
-          <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="1" checked></div>
-          <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="2" checked></div>
-          <div class="tier-item-inline"><span class="tier-num-label">3</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="3"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">4</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="4"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">5</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="5"></div>
-        </div>
+    <!-- Guard Tiers Panel -->
+    <div class="tier-group-row">
+      <div class="tier-group-title">Гвардия</div>
+      <div class="tiers-strip-horizontal">
+        <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="1" checked></div>
+        <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="2" checked></div>
+        <div class="tier-item-inline"><span class="tier-num-label">3</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="3"></div>
+        <div class="tier-item-inline"><span class="tier-num-label">4</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="4"></div>
+        <div class="tier-item-inline"><span class="tier-num-label">5</span><input type="checkbox" class="tier-checkbox guard-cb" data-tier="5"></div>
       </div>
-
-      <!-- Swordsmen Section -->
-      <div class="tier-group-row">
-        <div class="tier-group-title">Мечники</div>
-        <div class="tiers-strip-horizontal">
-          <div class="tier-item-inline"><span class="tier-num-label">1</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="1"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">2</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="2"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">3</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="3"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">4</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="4"></div>
-          <div class="tier-item-inline"><span class="tier-num-label">5</span><input type="checkbox" class="tier-checkbox spec-cb" data-tier="5"></div>
-        </div>
-      </div>
-
     </div>
 
     <!-- Ladder Result -->
@@ -402,7 +422,7 @@
     <div class="footer-branding">
       <img src="cat.jpg" alt="Gray Cat" class="footer-img" id="footerImg">
       <span class="footer-caption">Gray Cat In Black Hoodie</span>
-      <span class="footer-version">simple ladder calculator v.3.6</span>
+      <span class="footer-version">simple ladder calculator v.4.1</span>
     </div>
 
   </div>
@@ -414,19 +434,40 @@
       { name: 'Копейщик 🔱', mult: 2, cost: 1 }
     ];
 
-    const specUnits = [
-      { name: 'Мечник 🗡️', mult: 2, cost: 1 }
-    ];
-
     const leadershipInput = document.getElementById('leadershipInput');
     const remainderVal = document.getElementById('remainderVal');
     const roundSelect = document.getElementById('roundSelect');
     const guardCheckboxes = document.querySelectorAll('.guard-cb');
-    const specCheckboxes = document.querySelectorAll('.spec-cb');
-    const allCheckboxes = document.querySelectorAll('.tier-checkbox');
     const ladderBody = document.getElementById('ladderBody');
     const resetBtn = document.getElementById('resetBtn');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
+    
+    const btnSimple = document.getElementById('btnSimple');
+    const btnAdvanced = document.getElementById('btnAdvanced');
+
+    let calcMode = 'simple'; // 'simple' (2.0) or 'advanced' (1.83)
+
+    // Mode Buttons Listeners
+    btnSimple.addEventListener('click', () => {
+      if (calcMode !== 'simple') {
+        calcMode = 'simple';
+        btnSimple.classList.add('active');
+        btnAdvanced.classList.remove('active');
+        roundSelect.disabled = false;
+        calculate();
+      }
+    });
+
+    btnAdvanced.addEventListener('click', () => {
+      if (calcMode !== 'advanced') {
+        calcMode = 'advanced';
+        btnAdvanced.classList.add('active');
+        btnSimple.classList.remove('active');
+        roundSelect.value = 'none'; // reset round in advanced mode
+        roundSelect.disabled = true;  // disable selector
+        calculate();
+      }
+    });
 
     // Theme Logic
     const savedTheme = localStorage.getItem('tb_calc_theme') || 'light';
@@ -452,44 +493,33 @@
       const L = parseFloat(leadershipInput.value) || 0;
       const roundMode = roundSelect.value;
 
-      const activeGuardTiers = [];
+      const activeTiers = [];
       guardCheckboxes.forEach(cb => {
-        if (cb.checked) activeGuardTiers.push(parseInt(cb.dataset.tier));
+        if (cb.checked) activeTiers.push(parseInt(cb.dataset.tier));
       });
 
-      const activeSpecTiers = [];
-      specCheckboxes.forEach(cb => {
-        if (cb.checked) activeSpecTiers.push(parseInt(cb.dataset.tier));
-      });
-
-      const hasActive = (activeGuardTiers.length > 0 || activeSpecTiers.length > 0);
-
-      if (!hasActive || L === 0) {
-        remainderVal.textContent = L;
-        ladderBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство, выберите гвардию и/или мечников</td></tr>';
+      if (activeTiers.length === 0 || L === 0) {
+        remainderVal.textContent = L.toLocaleString('ru-RU');
+        ladderBody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-muted); font-size:0.85rem;">Укажите лидерство и выберите уровни гвардии</td></tr>';
         return;
       }
 
-      // Max Tier K1 across ALL selected units (Guard + Spec)
-      const allActiveTiers = [...activeGuardTiers, ...activeSpecTiers];
-      const K1 = Math.max(...allActiveTiers);
+      const K1 = Math.max(...activeTiers); // Highest Tier
+      const ratio = (calcMode === 'advanced') ? 1.83 : 2.0;
 
-      // Total Block Cost K2 calculation
+      // Calculate Block Cost K2
       let K2 = 0;
-      activeGuardTiers.forEach(t => {
-        K2 += 6 * Math.pow(2, K1 - t);
-      });
-      activeSpecTiers.forEach(t => {
-        K2 += 2 * Math.pow(2, K1 - t);
+      activeTiers.forEach(t => {
+        K2 += 6 * Math.pow(ratio, K1 - t);
       });
 
       // Calculate Base X (K3)
       let K3 = 0;
       if (K2 > 0) {
         const rawX = L / K2;
-        if (roundMode === '10') {
+        if (roundMode === '10' && calcMode === 'simple') {
           K3 = Math.floor(rawX / 10) * 10;
-        } else if (roundMode === '100') {
+        } else if (roundMode === '100' && calcMode === 'simple') {
           K3 = Math.floor(rawX / 100) * 100;
         } else {
           K3 = Math.floor(rawX);
@@ -499,25 +529,15 @@
       let totalUsedLeadership = 0;
       let htmlRows = '';
 
-      // Output Ladder by Tier (T5 down to T1)
+      // Output Ladder (T5 down to T1)
       for (let t = 5; t >= 1; t--) {
-        const hasGuard = activeGuardTiers.includes(t);
-        const hasSpec = activeSpecTiers.includes(t);
-
-        if (!hasGuard && !hasSpec) continue;
+        if (!activeTiers.includes(t)) continue;
 
         const tierClass = (t % 2 === 0) ? 'row-tier-even' : 'row-tier-odd';
-        
-        // Total rows in this tier for rowspan calculation
-        const tierUnits = [];
-        if (hasGuard) tierUnits.push(...guardUnits);
-        if (hasSpec) tierUnits.push(...specUnits);
+        const totalRowsInTier = guardUnits.length; // 3 rows
 
-        const totalRowsInTier = tierUnits.length;
-        const sizeClass = `tier-size-${totalRowsInTier}`;
-
-        tierUnits.forEach((unit, idx) => {
-          const count = K3 * unit.mult * Math.pow(2, K1 - t);
+        guardUnits.forEach((unit, idx) => {
+          const count = Math.floor(K3 * unit.mult * Math.pow(ratio, K1 - t));
           const leadCost = count * unit.cost;
           totalUsedLeadership += leadCost;
 
@@ -526,9 +546,8 @@
 
           htmlRows += `<tr class="ladder-row ${tierClass} ${borderClass}">`;
 
-          // Dynamic background number fitting the block height perfectly
           if (isFirstRowOfTier) {
-            htmlRows += `<td class="tier-number-cell ${sizeClass}" rowspan="${totalRowsInTier}">${t}</td>`;
+            htmlRows += `<td class="tier-number-cell" rowspan="${totalRowsInTier}">${t}</td>`;
           }
 
           htmlRows += `
@@ -548,13 +567,16 @@
     resetBtn.addEventListener('click', () => {
       leadershipInput.value = 0;
       roundSelect.value = 'none';
-      allCheckboxes.forEach(cb => cb.checked = false);
+      if (calcMode === 'simple') {
+        roundSelect.disabled = false;
+      }
+      guardCheckboxes.forEach(cb => cb.checked = false);
       calculate();
     });
 
     leadershipInput.addEventListener('input', calculate);
     roundSelect.addEventListener('change', calculate);
-    allCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
+    guardCheckboxes.forEach(cb => cb.addEventListener('change', calculate));
 
     // Initial Run
     calculate();
